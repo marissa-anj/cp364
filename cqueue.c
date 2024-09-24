@@ -85,8 +85,39 @@ int is_full_cqueue(cQueue *q) {
  */
 void print_cqueue(cQueue *q) {
 	// Put your code here
-	}
 
+	assert(q!=NULL);
+	int i = q->front;
+	printf("Capacity = %d, Size = %d, front = %d, rear = %d\n", q->capacity,
+
+	len_cqueue(q), q->front, q->rear);
+
+	if (is_empty_cqueue(q)) {
+		printf("<empty_cqueue>\n");
+	}
+	else {
+
+	int count = 0;
+		if(q->front == q->rear){
+		print_data(&q->array[i%q->capacity]);
+		}
+		else{
+			do{
+				print_data(&q->array[i%q->capacity]);
+				if (count < 4){
+					printf("\t");
+					count++;
+				}
+				else {
+					printf("\n");
+					count = 0;
+				}
+			i++;
+			} while (i % q->capacity != q->rear);
+			print_data(&q->array[i%q->capacity]);
+		}
+	}
+	printf("\n");
 	return;
 }
 
@@ -146,6 +177,29 @@ Data* peek_cqueue(cQueue *q) {
  */
 Data* remove_cqueue(cQueue *q) {
 	// Put your code here
+	assert(q!=NULL);
+
+	Data *d = NULL;
+
+	if (is_empty_cqueue(q)) {
+		printf("Error(remove_cqueue): cqueue is empty\n");
+		return d;
+	}
+
+
+	d = copy_data(&q->array[q->front]);
+	Data *temp = &q->array[q->front];
+	destroy_data(&temp);
+
+	q->front = (q->front+1) % q->capacity;
+
+	q->size--;
+
+
+	if (len_cqueue(q) == 0) { //if queue becomes empty
+		q->front = -1;
+		q->rear = -1;
+	}
 	return d;
 }
 
